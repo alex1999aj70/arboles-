@@ -19,13 +19,11 @@ Aplicar el algoritmo J48 (la implementación en Weka de C4.5, una versión mejor
 6. En **Test options**, elegir **Cross-validation, 10 folds** y hacer clic en **Start**.
 7. Clic derecho sobre el resultado en la lista y **Visualize tree**.
 
-**Captura 1:** pantalla de Weka con `iris.arff` cargado (Preprocess).
-`[inserta aquí tu captura]`
+
 
 ## 3. Resultados
 
-**Captura 2:** salida del clasificador (Classifier output).
-`[inserta aquí tu captura]`
+
 
 | Dato | Con el conjunto de entrenamiento | Con validación cruzada de 10 pliegues |
 | ---- | -------------------------------- | ------------------------------------- |
@@ -37,8 +35,7 @@ Aplicar el algoritmo J48 (la implementación en Weka de C4.5, una versión mejor
 
 ### Árbol de decisión
 
-**Captura 3:** árbol (Visualize tree).
-`[inserta aquí tu captura]`
+
 
 Árbol podado que muestra Weka (entre paréntesis: flores que llegan a la hoja / flores mal clasificadas):
 
