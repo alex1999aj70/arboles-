@@ -1,0 +1,126 @@
+---
+title: "Naive Bayes en R con el conjunto de datos Iris"
+author: "Alejandro del Jesus Diaz Lopez (matrícula 191087)"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## 1. Teorema de Bayes y clasificador Naive Bayes
+
+El teorema de Bayes permite "invertir" una probabilidad condicional:
+
+$$P(A \mid B) = \frac{P(A)\, P(B \mid A)}{P(B)}$$
+
+Para clasificar una flor con atributos $x_1, \dots, x_n$ en una clase $C$, Naive Bayes calcula:
+
+$$P(C \mid x_1, \dots, x_n) \propto P(C) \prod_{i=1}^{n} P(x_i \mid C)$$
+
+El método es "ingenuo" (*naive*) porque supone que los atributos son **independientes entre sí** dada la clase. La clase con mayor probabilidad es la predicción. Como los atributos de Iris son numéricos, cada $P(x_i \mid C)$ se modela con una distribución normal con la media y la desviación estándar de ese atributo dentro de la clase.
+
+## 2. Los datos
+
+El conjunto **Iris** tiene 150 flores de tres especies (*setosa*, *versicolor* y *virginica*), con 50 de cada una, y cuatro medidas en centímetros: largo y ancho del sépalo y del pétalo.
+
+```{r datos}
+data(iris)
+str(iris)
+table(iris$Species)
+summary(iris)
+```
+
+## 3. Paquete e1071
+
+La función `naiveBayes()` del paquete `e1071` entrena el clasificador.
+
+```{r paquete}
+# install.packages("e1071")   # solo la primera vez
+library(e1071)
+```
+
+## 4. División en entrenamiento y prueba
+
+Se usa el 70 % de las flores para entrenar y el 30 % para probar.
+
+```{r division}
+set.seed(123)
+filas_entrenamiento <- sample(1:nrow(iris), size = round(0.7 * nrow(iris)))
+entrenamiento <- iris[filas_entrenamiento, ]
+prueba        <- iris[-filas_entrenamiento, ]
+
+nrow(entrenamiento)
+nrow(prueba)
+```
+
+## 5. Entrenamiento del modelo
+
+```{r modelo}
+modelo <- naiveBayes(Species ~ ., data = entrenamiento)
+modelo
+```
+
+El resultado muestra:
+
+- **A-priori probabilities:** la probabilidad $P(C)$ de cada especie en los datos de entrenamiento.
+- **Conditional probabilities:** para cada atributo, la media (primera columna) y la desviación estándar (segunda columna) dentro de cada especie.
+
+## 6. Predicción y evaluación
+
+```{r prediccion}
+prediccion <- predict(modelo, newdata = prueba[, 1:4])
+matriz <- table(Prediccion = prediccion, Real = prueba$Species)
+matriz
+```
+
+La **matriz de confusión** tiene en las filas lo que dijo el clasificador y en las columnas el valor real. Lo que está en la diagonal son aciertos.
+
+```{r exactitud}
+exactitud <- sum(diag(matriz)) / sum(matriz)
+round(exactitud, 4)
+```
+
+## 7. Cómo calcula una predicción (a mano)
+
+Para entender qué hace `predict()`, se calcula la probabilidad de cada especie para la primera flor *versicolor* del conjunto de prueba, siguiendo la fórmula del punto 1.
+
+```{r a_mano}
+flor <- prueba[prueba$Species == "versicolor", ][1, 1:4]
+flor
+
+prior <- modelo$apriori / sum(modelo$apriori)
+
+verosimilitud <- sapply(names(prior), function(clase) {
+  prod(sapply(names(flor), function(atributo) {
+    dnorm(flor[[atributo]],
+          mean = modelo$tables[[atributo]][clase, 1],
+          sd   = modelo$tables[[atributo]][clase, 2])
+  }))
+})
+
+numerador <- prior * verosimilitud
+probabilidad <- numerador / sum(numerador)
+round(probabilidad, 4)
+
+# Coincide con la clase que elige predict()
+names(which.max(probabilidad))
+as.character(predict(modelo, flor))
+```
+
+## 8. Probabilidades de la predicción
+
+```{r probabilidades}
+head(predict(modelo, newdata = prueba[, 1:4], type = "raw"), 6)
+```
+
+## 9. Conclusiones
+
+- Naive Bayes clasifica las flores de Iris usando solo medias, desviaciones estándar y probabilidades a priori de cada especie.
+- Aunque la suposición de independencia entre los atributos no es del todo cierta en Iris (el largo y el ancho del pétalo están relacionados), el clasificador funciona bien.
+- La especie *setosa* se separa casi sin errores; si hay confusiones, suelen darse entre *versicolor* y *virginica*.
+- Con pocas observaciones de prueba, la exactitud cambia según la muestra elegida; para medirla mejor se puede usar validación cruzada.
