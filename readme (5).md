@@ -21,12 +21,6 @@ Se estudiaron el algoritmo ID3 y el teorema de Bayes con Naive Bayes, y se aplic
 | 3 | Liga al cuaderno de Colab | [pegar aquí la liga del cuaderno de Colab] (archivo: [`iris-colab.ipynb`](iris-colab.ipynb)) |
 | 4 | Archivos Rmd y html del punto 6 (Naive Bayes en R con Iris) | [`04-naive-bayes-iris.Rmd`](04-naive-bayes-iris.Rmd) y [`04-naive-bayes-iris.html`](04-naive-bayes-iris.html) |
 | 5 | Matriz de confusión del punto 7 | [`05-matriz-confusion.md`](05-matriz-confusion.md) |
-| 6 | Archivos Rmd y html del punto 8 (`actividadNBFCI.md`) | Pendiente |
-| 7 | Liga al cuaderno de Colab | La misma del entregable 3 |
 
-## Pendientes antes de entregar
 
-- [ ] Instalar Weka, repetir la prueba de J48 y poner tus capturas en `02-reporte-j48-weka.md` (borrar la nota del inicio).
-- [ ] Subir `iris-colab.ipynb` a Google Colab, compartirlo y pegar la liga en este archivo.
-- [ ] Hacer la actividad `actividadNBFCI.md` (punto 8) y agregar su `.Rmd` y `.html`.
-- [ ] Revisar la matriz del punto 7 con el clasificador de la hoja `naive-byes.iris.data.xls`.
+
