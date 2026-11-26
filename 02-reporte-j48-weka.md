@@ -3,7 +3,6 @@
 **Autor:** Alejandro del Jesus Diaz Lopez · Matrícula 191087
 **Materia:** Programación avanzada (IA) · FCI UNACAR · Profesor: Jesús Alejandro Flores Hernández
 
-> **Nota para ti (bórrala antes de entregar):** los resultados de este reporte salieron de ejecutar J48 de Weka con sus valores por defecto (`-C 0.25 -M 2`) por línea de comandos, con la versión 3.6.14 de Weka y los datos de Iris de Fisher. Abre Weka en tu computadora, repite los pasos de la sección 2 y compara: el árbol y los números deben salir iguales o casi iguales. Reemplaza las capturas marcadas con las de tu pantalla.
 
 ## 1. Objetivo
 
